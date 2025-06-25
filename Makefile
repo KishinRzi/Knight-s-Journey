@@ -1,49 +1,42 @@
 ##
-## EPITECH PROJECT, 2023
-## MAKEFILE
-## File description:
-## it's a Makefile
+## Knight's Journey Makefile — Clean & macOS-ready
 ##
 
-SRC =	src/main.c\
-		src/rpg_loop.c\
-		src/texture_handeling.c\
-		src/init_functions/init_rpg.c\
-		src/combat/start_combat.c\
-		src/combat/combat_loop.c\
-		src/movements/unit_movements.c\
-		src/animation_fonctions/player_movement_animation.c\
-		src/event_functions/event_loop.c\
-		src/event_functions/combat_event_loop.c\
-		src/display_functions/display_window.c\
-		src/display_functions/display_unit.c\
-		src/display_functions/display_combat.c\
-		src/free_functions/free.c\
-
-OBJTEST =	$(SRCTEST:.c=.o)
+SRC = \
+	src/main.c \
+	src/rpg_loop.c \
+	src/texture_handeling.c \
+	src/init_functions/init_rpg.c \
+	src/combat/start_combat.c \
+	src/combat/combat_loop.c \
+	src/movements/unit_movements.c \
+	src/animation_fonctions/player_movement_animation.c \
+	src/event_functions/event_loop.c \
+	src/event_functions/combat_event_loop.c \
+	src/display_functions/display_window.c \
+	src/display_functions/display_unit.c \
+	src/display_functions/display_combat.c \
+	src/free_functions/free.c
 
 OBJ = $(SRC:.c=.o)
 
-NAME =	my_rpg
+NAME = my_rpg
 
-CFLAGS	=	-Wall\
-					-Wextra\
-					-I include/\
-					-lcsfml-graphics\
-					-lcsfml-system\
-					-lcsfml-window\
-					-lcsfml-audio\
+CC = gcc
+# Ton include perso + Homebrew SFML
+CFLAGS = -Wall -Wextra -Iinclude -I/opt/homebrew/include
+# Libs Homebrew SFML/CSFML + chemin Homebrew lib
+LDFLAGS = -L/opt/homebrew/lib -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio
 
-all:	$(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
+	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJ) $(OBJTEST)
+	rm -f $(OBJ)
 
-fclean:	clean
-	rm -f $(NAME) $(NAMETEST)
+fclean: clean
+	rm -f $(NAME)
 
-re:	fclean
-	make all
+re: fclean all

@@ -1,29 +1,16 @@
-/*
-** EPITECH PROJECT, 2023
-** destroy all
-** File description:
-** function to destroy all memory allocated elements
-*/
-
 #include "../include/my_rpg.h"
 
-static bool is_error(int ac, char **av, char **env)
+static bool is_error(int ac)
 {
-    if (ac != 1 || !env || !av)
+    if (ac != 1)
         return false;
-    for (int i = 0; env[i]; i++) {
-        if (!strncmp(env[i], "DISPLAY", 7)) {
-            return true;
-        }
-    }
-    fprintf(stderr, "not in a terminal.\n");
-    return false;
+    return true;
 }
 
 int main(int ac, char **av, char **env)
 {
     srand(time(NULL));
-    if (!(is_error(ac, av, env)))
+    if (!(is_error(ac)))
         return 84;
     if (!start_game())
         return 84;

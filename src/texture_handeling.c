@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** destroy all
-** File description:
-** function to destroy all memory allocated elements
-*/
-
 #include "../include/my_rpg.h"
 
 static void free_texture_list(texture_t *texture_list)

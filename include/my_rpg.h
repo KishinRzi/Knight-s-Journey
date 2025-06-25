@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** my_rpg.h
-** File description:
-** header file for my_rpg program
-*/
-
 #include <SFML/Graphics.h>
 #include <SFML/Config.h>
 #include <SFML/Audio.h>
