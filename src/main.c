@@ -1,29 +1,33 @@
-#include "../include/my_rpg.h"
+// src/main.c
+#include <SFML/Graphics.h>
+#include "game.h"
 
-int main(int ac, char **av, char **env)
+int main(void)
 {
-    (void)ac;
-    (void)av;
-    (void)env;
+    sfVideoMode mode = {1280, 720, 32};
+    sfRenderWindow *window = sfRenderWindow_create(mode, "Knight's Journey", sfResize | sfClose, NULL);
+    sfClock *clock = sfClock_create();
 
-    srand(time(NULL));
-    int menu_result = start_menu();
-    if (menu_result == 0)
-        return 0; // joueur a quitté depuis le menu
-    if (!start_game())
+    if (!window)
         return 84;
+
+    sfRenderWindow_setFramerateLimit(window, 60);
+
+    while (sfRenderWindow_isOpen(window)) {
+        sfEvent event;
+        while (sfRenderWindow_pollEvent(window, &event)) {
+            if (event.type == sfEvtClosed)
+                sfRenderWindow_close(window);
+        }
+
+        sfRenderWindow_clear(window, sfBlack);
+
+        update_game(window, clock);  // apl le moteur de jeu
+
+        sfRenderWindow_display(window);
+    }
+
+    sfClock_destroy(clock);
+    sfRenderWindow_destroy(window);
     return 0;
 }
-
-bool start_game(void)
-{
-    rpg_t *rpg = init_rpg();
-
-    if (!rpg)
-        return false;
-
-    rpg_loop(rpg);       // apl la vraie boucle de jeu
-    free_rpg(rpg);      
-    return true;
-}
-
