@@ -56,15 +56,11 @@ sfTexture *get_texture(char *str)
     }
     tmp = create_new_texture_node(str);
     if (!tmp) {
+        fprintf(stderr, "ERREUR : texture '%s' introuvable.\n", str);
         free_texture_list(texture_list);
         exit(84);
     }
     tmp->next = texture_list;
     texture_list = tmp;
     return tmp->texture;
-
-    sfTexture *texture = sfTexture_createFromFile(str, NULL);
-    if (!texture)
-        printf("ERREUR : texture '%s' introuvable ou illisible\n", str);
-    return texture;
 }

@@ -1,38 +1,48 @@
-#include <SFML/Graphics.h>
-#include <SFML/Config.h>
-#include <SFML/Audio.h>
-#include <SFML/System/Export.h>
-#include <SFML/System/Time.h>
-#include <SFML/System/Types.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <time.h>
-
 #ifndef MYRPG_H
     #define MYRPG_H
 
-    #define WIND_W 1080
-    #define WIND_H 1920
-    #define UNIT_SIZE 64
-    #define HERO_SIZE_W 414 / 6
-    #define HERO_SIZE_H 748 / 17
-    #define FRAME_SIZE 400 / 3
+// === SFML ===
+    #include <SFML/Graphics.h>
+    #include <SFML/Audio.h>
+    #include <SFML/Config.h>
+    #include <SFML/System/Time.h>
+    #include <SFML/System/Types.h>
 
-    #define MOVE_UP 1
-    #define MOVE_LEFT 2
-    #define MOVE_DOWN 3
-    #define MOVE_RIGHT 4
+// === STD ===
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <stdbool.h>
+    #include <unistd.h>
+    #include <fcntl.h>
+    #include <string.h>
+    #include <time.h>
 
+// === MACROS ===
+    #define WIND_W         1080
+    #define WIND_H         1920
 
-    #define HERO_PATH "assets/main_char.png"
-    #define ENEMY_PATH "assets/asian_female.png"
-    #define CBT_HERO_PATH "assets/Warrior-V1.3/Warrior/SpriteSheet/Warrior_Sheet-Effect.png"
+    #define UNIT_SIZE      64  // Utilisé pour les unités classiques
+
+    // Dimensions réelles d’une frame de main_char.png
+    #define HERO_SIZE_W    138
+    #define HERO_SIZE_H    84
+
+    #define FRAME_SIZE     (400 / 3) // Pour l'UI de combat
+
+    // Directions
+    #define MOVE_UP        1
+    #define MOVE_LEFT      2
+    #define MOVE_DOWN      3
+    #define MOVE_RIGHT     4
+
+    // === ASSETS PATHS ===
+    #define HERO_PATH      "assets/main_char.png"
+    #define ENEMY_PATH     "assets/asian_female.png"
+    #define CBT_HERO_PATH  "assets/Warrior-V1.3/Warrior/SpriteSheet/Warrior_Sheet-Effect.png"
     #define CBT_BACKGROUND "assets/fight_background.png"
-    #define CBT_FRAME "assets/cbt_frame.png"
+    #define CBT_FRAME      "assets/cbt_frame.png"
+
+// === STRUCTURES ===
 
 typedef struct texture_s {
     char *name;
@@ -82,28 +92,43 @@ typedef struct rpg_s {
     bool is_combat;
 } rpg_t;
 
+// === INITIALISATION ===
 rpg_t *init_rpg(void);
 sfTexture *get_texture(char *str);
 unit_t *create_unit(char *path, int hp);
+unit_t *create_hero_combat(char *path, int hp);
+int start_menu(void);
+
+// === MOUVEMENTS & ANIMATIONS ===
 void move_unit(unit_t *player, sfClock *clock, int movement);
 void up_animation(unit_t *unit);
-void left_animation(unit_t *unit);
 void down_animation(unit_t *unit);
+void left_animation(unit_t *unit);
 void right_animation(unit_t *unit);
 void static_animation(unit_t *unit);
 void static_animation_hero(unit_t *unit);
 void reset_player_animation(unit_t *unit);
+
+// === COMBAT ===
 bool start_game(void);
-void handle_event(rpg_t *rpg);
 void is_combat(rpg_t *rpg);
 void combat_loop(rpg_t *rpg);
 void handle_combat_event(rpg_t *rpg);
+
+// === AFFICHAGE ===
+void rpg_loop(rpg_t *rpg);
 void display_unit(sfRenderWindow *window, unit_t *unit);
 void display_window(sfRenderWindow *window);
 void display_combat(rpg_t *rpg);
+
+// === ÉVÉNEMENTS ===
+void handle_event(rpg_t *rpg);
+
+// === LIBÉRATION MÉMOIRE ===
 void free_rpg(rpg_t *rpg);
 void free_unit(unit_t *unit);
 void free_combat(combat_t *combat);
-void free_multiple_units(unit_t **units);
 void free_combat_gui(combat_gui_t *combat_gui);
-#endif
+void free_multiple_units(unit_t **units);
+
+#endif /* MYRPG_H */

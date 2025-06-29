@@ -2,7 +2,7 @@
 
 static void handle_combat_keypressed(rpg_t *rpg)
 {
-
+(void)rpg;
 }
 
 void handle_combat_event(rpg_t *rpg)

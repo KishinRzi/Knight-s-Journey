@@ -1,17 +1,26 @@
 #include "../include/my_rpg.h"
 
-bool start_game(void)
+void rpg_loop(rpg_t *rpg)
 {
-    rpg_t *rpg = init_rpg();
+    sfTime delta;
+    float seconds;
 
-    if (!rpg)
-        return false;
     while (sfRenderWindow_isOpen(rpg->window)) {
-        sfClock_restart(rpg->clock);
+        delta = sfClock_restart(rpg->clock);
+        seconds = sfTime_asSeconds(delta);
+        (void)seconds;
+
         handle_event(rpg);
-        display_unit(rpg->window, rpg->player);
-        display_window(rpg->window);
+
+        sfRenderWindow_clear(rpg->window, sfColor_fromRGB(80, 80, 80)); // fond gris clair
+
+        if (rpg->is_combat) {
+            combat_loop(rpg);
+        } else {
+            display_window(rpg->window);
+            display_unit(rpg->window, rpg->player); // animation incluse ici
+        }
+
+        sfRenderWindow_display(rpg->window);
     }
-    free_rpg(rpg);
-    return true;
 }
