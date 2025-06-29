@@ -1,14 +1,27 @@
-// src/game.c
-#include <SFML/Graphics.h>
 #include "game.h"
+#include "player.h"
+
+static player_t *player = NULL;
 
 void update_game(sfRenderWindow *window, sfClock *clock)
 {
-    // Exemple de fond (bientôt remplacé par la map)
-    sfRectangleShape *background = sfRectangleShape_create();
-    sfRectangleShape_setSize(background, (sfVector2f){1280, 720});
-    sfRectangleShape_setFillColor(background, sfColor_fromRGB(30, 30, 40));
+    static int initialized = 0;
+    if (!initialized) {
+        player = create_player("assets/Warrior-V1.3/Warrior/SpriteSheet/Warrior_Sheet-Effect.png");
+        initialized = 1;
+    }
 
-    sfRenderWindow_drawRectangleShape(window, background, NULL);
-    sfRectangleShape_destroy(background);
+    sfTime time = sfClock_restart(clock);
+    float delta_time = sfTime_asSeconds(time);
+
+    sfEvent event;
+    while (sfRenderWindow_pollEvent(window, &event)) {
+        if (event.type == sfEvtClosed)
+            sfRenderWindow_close(window);
+    }
+
+    move_player(player, delta_time);
+    sfRenderWindow_clear(window, sfColor_fromRGB(20, 20, 80));
+    draw_player(window, player);
+    sfRenderWindow_display(window);
 }

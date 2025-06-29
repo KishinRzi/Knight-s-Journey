@@ -1,14 +1,21 @@
-## rpg/Makefile
-SRC = src/main.c src/game.c
+## Makefile compatible macOS
+SRC = src/main.c src/game.c src/player.c
 OBJ = $(SRC:.c=.o)
-CFLAGS = -Wall -Wextra -Iinclude
-LDFLAGS = -lcsfml-graphics -lcsfml-window -lcsfml-system
 NAME = rpg
+
+
+INCLUDE = -Iinclude -I/opt/homebrew/include
+LIB = -L/opt/homebrew/lib
+FLAGS = -Wall -Wextra
+LDFLAGS = -lcsfml-graphics -lcsfml-window -lcsfml-system
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	$(CC) $(OBJ) -o $(NAME) $(LIB) $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
 	rm -f $(OBJ)

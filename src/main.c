@@ -1,4 +1,3 @@
-// src/main.c
 #include <SFML/Graphics.h>
 #include "game.h"
 
@@ -8,23 +7,13 @@ int main(void)
     sfRenderWindow *window = sfRenderWindow_create(mode, "Knight's Journey", sfResize | sfClose, NULL);
     sfClock *clock = sfClock_create();
 
-    if (!window)
+    if (!window || !clock)
         return 84;
 
     sfRenderWindow_setFramerateLimit(window, 60);
 
     while (sfRenderWindow_isOpen(window)) {
-        sfEvent event;
-        while (sfRenderWindow_pollEvent(window, &event)) {
-            if (event.type == sfEvtClosed)
-                sfRenderWindow_close(window);
-        }
-
-        sfRenderWindow_clear(window, sfBlack);
-
-        update_game(window, clock);  // apl le moteur de jeu
-
-        sfRenderWindow_display(window);
+        update_game(window, clock);  // tout est géré ici
     }
 
     sfClock_destroy(clock);
