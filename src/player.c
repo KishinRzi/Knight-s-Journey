@@ -1,4 +1,5 @@
 #include "player.h"
+#include "enemy.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -28,6 +29,10 @@ player_t *create_player(const char *filepath)
     player->speed = 4.0f;
     player->frame_index = 0;
     player->frame_timer = 0;
+    player->hp = 100;
+    player->stamina = 100;
+    player->attack_cooldown = 0.f;
+
 
     sfSprite_setTexture(player->sprite, player->texture, sfFalse);
     sfIntRect rect = {0, RUN_LINE_INDEX * FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT};
@@ -61,6 +66,9 @@ void move_player(player_t *player, float delta_time)
         player->position.y += player->speed;
         moving = 1;
     }
+    if (player->attack_cooldown > 0)
+    player->attack_cooldown -= delta_time;
+
 
     sfSprite_setScale(player->sprite, scale);
 
@@ -92,4 +100,22 @@ void destroy_player(player_t *player)
     sfSprite_destroy(player->sprite);
     sfTexture_destroy(player->texture);
     free(player);
+}
+
+int player_attack(player_t *player, enemy_t *enemy)
+{
+    if (!enemy->is_alive || player->stamina < 20 || player->attack_cooldown > 0)
+        return 0;
+
+    sfFloatRect p = sfSprite_getGlobalBounds(player->sprite);
+    sfFloatRect e = sfSprite_getGlobalBounds(enemy->sprite);
+
+    if (sfFloatRect_intersects(&p, &e, NULL)) {
+        enemy->hp -= 30;
+        player->stamina -= 20;
+        player->attack_cooldown = 0.5f; // demi seconde de cooldown
+        if (enemy->hp <= 0) enemy->is_alive = 0;
+        return 1;
+    }
+    return 0;
 }

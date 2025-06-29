@@ -1,8 +1,13 @@
 ## Makefile compatible macOS
-SRC = src/main.c src/game.c src/player.c
+
+SRC = src/main.c \
+      src/game.c \
+      src/player.c \
+      src/enemy.c \
+      src/hud.c
+
 OBJ = $(SRC:.c=.o)
 NAME = rpg
-
 
 INCLUDE = -Iinclude -I/opt/homebrew/include
 LIB = -L/opt/homebrew/lib
